@@ -1,0 +1,76 @@
+---
+sidebar_position: 1
+title: Positioning
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# Positioning
+
+Use the `position` input to offset a component on the isometric plane and control its elevation.
+
+## Type signature
+
+```ts
+interface Position {
+  top?: string | number;
+  left?: string | number;
+  elevation?: string | number;
+}
+```
+
+## Supported components
+
+- [IsometricCube](../components/isometric-cube.mdx)
+- [IsometricPlane](../components/isometric-plane.mdx)
+- [IsometricGrid](../components/isometric-grid.mdx)
+
+## Example
+
+```ts
+import { Component } from "@angular/core";
+import { Isometric } from "isometric-angular";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-positioned-plane",
+  imports: [Isometric, IsometricPlane],
+  template: `
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 8, height: 8 }"
+        color="#4f8bff"
+        [position]="{ top: 2, left: -1, elevation: 1 }"
+      ></div>
+    </div>
+  `,
+})
+export class PositionedPlane {}
+```
+
+### Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 8, height: 8 }"
+        color="#4f8bff"
+        [edge]="{ depth: 2, color: '#2c4ea3' }"
+        [position]="{ top: 2, left: -1, elevation: 1 }"
+      ></div>
+    </div>
+  `}
+/>
+
+## Fields
+
+| Field       | Type               | Description                                   |
+| ----------- | ------------------ | --------------------------------------------- |
+| `top`       | `number \| string` | Vertical offset on the isometric plane.       |
+| `left`      | `number \| string` | Horizontal offset on the isometric plane.     |
+| `elevation` | `number \| string` | Elevates or lowers the element on the Z axis. |
+
+Numeric values are treated as `rem`. String values let you provide explicit CSS units like `"2rem"` or `"16px"`. Omitted fields default to `0`.

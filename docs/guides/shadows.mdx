@@ -1,0 +1,76 @@
+---
+sidebar_position: 3
+title: Shadows
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# Shadows
+
+Use `shadow` to add depth cues by projecting a shadow from the component.
+
+## Type signature
+
+```ts
+interface Shadow {
+  distance: string | number;
+  spacingX: number;
+  spacingY: number;
+}
+```
+
+## Supported components
+
+- [IsometricCube](../components/isometric-cube.mdx)
+- [IsometricPlane](../components/isometric-plane.mdx)
+- [IsometricGrid](../components/isometric-grid.mdx)
+
+## Example
+
+```ts
+import { Component } from "@angular/core";
+import { Isometric } from "isometric-angular";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-plane-shadow",
+  imports: [Isometric, IsometricPlane],
+  template: `
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 8, height: 8 }"
+        color="#4f8bff"
+        [shadow]="{ distance: 3, spacingX: 1, spacingY: 1 }"
+      ></div>
+    </div>
+  `,
+})
+export class PlaneShadow {}
+```
+
+### Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 8, height: 8 }"
+        color="#4f8bff"
+        [edge]="{ depth: 2, color: '#2c4ea3' }"
+        [shadow]="{ distance: 2, spacingX: 1, spacingY: 1 }"
+      ></div>
+    </div>
+  `}
+/>
+
+## Fields
+
+| Field      | Type               | Description                                                                |
+| ---------- | ------------------ | -------------------------------------------------------------------------- |
+| `distance` | `number \| string` | How far the shadow is projected from the object. Numbers are treated as `rem`. |
+| `spacingX` | `number`           | Horizontal shadow direction multiplier.                                    |
+| `spacingY` | `number`           | Vertical shadow direction multiplier.                                      |
+
+Increase `distance` for softer, farther shadows. Use `spacingX` and `spacingY` to control direction.

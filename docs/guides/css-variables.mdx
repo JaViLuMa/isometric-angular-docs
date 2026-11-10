@@ -1,0 +1,227 @@
+---
+sidebar_position: 7
+title: CSS Variables
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# CSS Variables
+
+`isometric-angular` is driven by CSS custom properties. Components turn their inputs into these variables, and the library styles read them. You can also set them yourself to customize visuals globally or per element.
+
+## How inputs and variables interact
+
+Each component writes the variables for its inputs as inline styles on its host element, through a `[style]` host binding. As a result:
+
+- A variable written by an input beats a regular stylesheet rule on the same element.
+- Variables that no input wrote can be set from your stylesheets. Custom properties inherit, so setting them on a parent themes everything inside it.
+- A style property binding in your template (`[style.--name]="..."` on the host element) takes precedence over the component's host binding. A static `style="..."` attribute does not: it can add other properties, but for a variable the component writes, the component's value wins.
+
+Some variables are written on every render because their inputs are required or have defaults: size and color on planes, size and depth on cubes, and size, color, line weight, and multipliers on grids.
+
+## Theme a scene from a stylesheet
+
+Cubes read their face borders from variables, so you can theme every cube in a scene without passing `border`:
+
+```ts
+import { Component } from "@angular/core";
+import { Isometric } from "isometric-angular";
+import {
+  IsometricCube,
+  IsometricCubeSide,
+} from "isometric-angular/isometric-cube";
+
+@Component({
+  selector: "app-themed-scene",
+  imports: [Isometric, IsometricCube, IsometricCubeSide],
+  styles: `
+    .scene {
+      --isometric-border-size-cube: 2px;
+      --isometric-border-style-cube: dashed;
+      --isometric-border-color-cube: #4f8bff;
+    }
+  `,
+  template: `
+    <div isometric-root class="scene">
+      <div isometric-cube [size]="{ width: 5, height: 5 }" [depth]="5">
+        <div isometricCubeSide="top"></div>
+        <div isometricCubeSide="front-left"></div>
+        <div isometricCubeSide="front-right"></div>
+      </div>
+    </div>
+  `,
+})
+export class ThemedScene {}
+```
+
+### Rendered example
+
+<RenderedExample
+  styles={`
+    .scene {
+      --isometric-border-size-cube: 2px;
+      --isometric-border-style-cube: dashed;
+      --isometric-border-color-cube: #4f8bff;
+    }
+  `}
+  template={`
+    <div isometric-root class="scene">
+      <div isometric-cube [size]="{ width: 5, height: 5 }" [depth]="5">
+        <div isometricCubeSide="top"></div>
+        <div isometricCubeSide="front-left"></div>
+        <div isometricCubeSide="front-right"></div>
+      </div>
+    </div>
+  `}
+/>
+
+## Override values written by inputs
+
+To override a variable that an input wrote, bind it with `[style.--name]` on the host element, or use `!important` in a stylesheet. The `!important` route is handy for states like `:hover`:
+
+```ts
+import { Component } from "@angular/core";
+import { Isometric } from "isometric-angular";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-hover-tiles",
+  imports: [Isometric, IsometricPlane],
+  styles: `
+    .tile:hover {
+      --isometric-plane-color: #ff7a59 !important;
+    }
+  `,
+  template: `
+    <div isometric-root>
+      <div
+        isometric-plane
+        class="tile"
+        [size]="{ width: 4, height: 4 }"
+        color="#4f8bff"
+      ></div>
+      <div
+        isometric-plane
+        class="tile"
+        [size]="{ width: 4, height: 4 }"
+        color="#4f8bff"
+        [position]="{ left: 5 }"
+        [style.--isometric-plane-color]="'#2c4ea3'"
+      ></div>
+    </div>
+  `,
+})
+export class HoverTiles {}
+```
+
+### Rendered example
+
+Hover over the tiles. The second tile overrides its `color` input with a `[style.--isometric-plane-color]` binding.
+
+<RenderedExample
+  styles={`
+    .tile:hover {
+      --isometric-plane-color: #ff7a59 !important;
+    }
+  `}
+  template={`
+    <div isometric-root>
+      <div
+        isometric-plane
+        class="tile"
+        [size]="{ width: 4, height: 4 }"
+        color="#4f8bff"
+      ></div>
+      <div
+        isometric-plane
+        class="tile"
+        [size]="{ width: 4, height: 4 }"
+        color="#4f8bff"
+        [position]="{ left: 5 }"
+        [style.--isometric-plane-color]="'#2c4ea3'"
+      ></div>
+    </div>
+  `}
+/>
+
+## Variable reference
+
+### Cube
+
+| Variable                        | Default | Purpose                      |
+| ------------------------------- | ------- | ---------------------------- |
+| `--isometric-cube-width`        | `0rem`  | Cube width.                  |
+| `--isometric-cube-height`       | `0rem`  | Cube height.                 |
+| `--isometric-cube-depth`        | `0rem`  | Cube depth.                  |
+| `--isometric-border-size-cube`  | `0px`   | Cube face border size.       |
+| `--isometric-border-style-cube` | `solid` | Cube face border style.      |
+| `--isometric-border-color-cube` | `#fff`  | Cube face border color base. |
+
+### Plane
+
+| Variable                  | Default   | Purpose           |
+| ------------------------- | --------- | ----------------- |
+| `--isometric-plane-width` | `0rem`    | Plane width.      |
+| `--isometric-plane-height` | `0rem`   | Plane height.     |
+| `--isometric-plane-color` | `#000000` | Plane fill color. |
+
+### Grid
+
+| Variable                      | Default | Purpose                 |
+| ----------------------------- | ------- | ----------------------- |
+| `--isometric-grid-size`       | `1rem`  | Base grid cell size.    |
+| `--isometric-grid-width`      | `1`     | Grid width multiplier.  |
+| `--isometric-grid-height`     | `1`     | Grid height multiplier. |
+| `--isometric-grid-color`      | `#000`  | Grid line color.        |
+| `--isometric-grid-lineweight` | `1%`    | Grid line thickness.    |
+
+### Border and edge helpers
+
+| Variable                   | Default   | Purpose                                     |
+| -------------------------- | --------- | ------------------------------------------- |
+| `--isometric-border-size`  | `0px`     | Border size for generic bordered elements.  |
+| `--isometric-border-style` | `solid`   | Border style for generic bordered elements. |
+| `--isometric-border-color` | `#000000` | Border color for generic bordered elements. |
+| `--isometric-edge-color`   | `#fff`    | Edge color base.                            |
+| `--isometric-edge-depth`   | `0px`     | Edge extrusion depth.                       |
+
+### Position
+
+| Variable                         | Default | Purpose           |
+| -------------------------------- | ------- | ----------------- |
+| `--isometric-position-top`       | `0rem`  | Top offset.       |
+| `--isometric-position-left`      | `0rem`  | Left offset.      |
+| `--isometric-position-elevation` | `0rem`  | Elevation offset. |
+
+### Rotation
+
+| Variable                        | Default  | Purpose                                |
+| ------------------------------- | -------- | -------------------------------------- |
+| `--isometric-rotate-from`       | `0deg`   | Initial rotation value on the element. |
+| `--isometric-rotation-duration` | `1s`     | Rotation animation duration.           |
+| `--isometric-rotation-delay`    | `0s`     | Rotation animation delay.              |
+| `--rotation-from`               | `0deg`   | Keyframe start value.                  |
+| `--rotation-to`                 | `360deg` | Keyframe end value.                    |
+
+### Shadow
+
+| Variable                                | Default | Purpose                                   |
+| --------------------------------------- | ------- | ----------------------------------------- |
+| `--isometric-shadow-distance`           | `0`     | Shadow distance for opacity falloff math. |
+| `--isometric-shadow-distance-with-unit` | `1rem`  | Shadow distance with unit for transforms. |
+| `--isometric-shadow-spacing-x`          | `0`     | Shadow X direction multiplier.            |
+| `--isometric-shadow-spacing-y`          | `0`     | Shadow Y direction multiplier.            |
+
+### Shadow animation
+
+| Variable                                      | Default  | Purpose                                                       |
+| --------------------------------------------- | -------- | ------------------------------------------------------------- |
+| `--isometric-shadow-animation-from`           | `0`      | Animation start distance.                                     |
+| `--isometric-shadow-animation-to`             | `0`      | Animation end distance.                                       |
+| `--isometric-shadow-animation-from-with-unit` | `0rem`   | Start distance with unit for transforms.                      |
+| `--isometric-shadow-animation-to-with-unit`   | `0rem`   | End distance with unit for transforms.                        |
+| `--isometric-shadow-animation-duration`       | `1s`     | Shadow animation duration.                                    |
+| `--isometric-shadow-animation-delay`          | `0s`     | Shadow animation delay.                                       |
+| `--isometric-shadow-animation-options`        | _(none)_ | Extra animation options, for example `alternate infinite`.    |
+| `--isometric-shadow-spacing-x`                | `0`      | Shared X direction multiplier used by animation transforms.   |
+| `--isometric-shadow-spacing-y`                | `0`      | Shared Y direction multiplier used by animation transforms.   |

@@ -1,0 +1,120 @@
+---
+sidebar_position: 3
+title: Quick Start
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# Quick Start
+
+This example renders a single isometric cube inside the required `isometric-root` container.
+
+```ts title="src/app/app.ts"
+import { Component } from "@angular/core";
+import { Isometric } from "isometric-angular";
+import {
+  IsometricCube,
+  IsometricCubeSide,
+} from "isometric-angular/isometric-cube";
+
+@Component({
+  selector: "app-root",
+  imports: [Isometric, IsometricCube, IsometricCubeSide],
+  template: `
+    <div isometric-root>
+      <div isometric-cube [size]="{ width: 5, height: 5 }" [depth]="2">
+        <div isometricCubeSide="top" style="background: #7aa7ff"></div>
+        <div isometricCubeSide="front-left" style="background: #4f8bff"></div>
+        <div isometricCubeSide="front-right" style="background: #2c4ea3"></div>
+        <div isometricCubeSide="bottom"></div>
+        <div isometricCubeSide="back-left"></div>
+        <div isometricCubeSide="back-right"></div>
+      </div>
+    </div>
+  `,
+})
+export class App {}
+```
+
+## Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div isometric-cube [size]="{ width: 5, height: 5 }" [depth]="2">
+        <div isometricCubeSide="top" style="background: #7aa7ff"></div>
+        <div isometricCubeSide="front-left" style="background: #4f8bff"></div>
+        <div isometricCubeSide="front-right" style="background: #2c4ea3"></div>
+        <div isometricCubeSide="bottom"></div>
+        <div isometricCubeSide="back-left"></div>
+        <div isometricCubeSide="back-right"></div>
+      </div>
+    </div>
+  `}
+/>
+
+## Notes
+
+- `isometric-root` sets up the isometric perspective for everything inside it.
+- `isometric-cube` requires both `size` (`{ width, height }`) and `depth`.
+- Each face is an element marked with the `isometricCubeSide` directive and one of:
+  `"top"`, `"front-left"`, `"front-right"`, `"bottom"`, `"back-left"`, `"back-right"`.
+- Faces are plain elements, so give them a background, a border, or any content you like.
+
+## Binding values
+
+Inputs accept numbers or CSS strings. Numbers get a default unit, strings are used as they are:
+
+```html
+<!-- Numbers need property binding -->
+<div isometric-cube [size]="{ width: 5, height: 5 }" [depth]="2"></div>
+
+<!-- Strings with units can also be static attributes -->
+<div isometric-cube [size]="{ width: '80px', height: '80px' }" depth="32px"></div>
+```
+
+:::warning
+
+A static attribute is always a string. `depth="2"` passes `"2"` with no unit, which is not a valid CSS length. Write `[depth]="2"` or `depth="2rem"` instead.
+
+:::
+
+| Value                                                  | Unit used for numbers |
+| ------------------------------------------------------ | --------------------- |
+| Sizes, cube depth, grid size, position, shadow distance | `rem`                 |
+| Border size, edge depth                                | `px`                  |
+| Rotation `from` / `to`                                 | `deg`                 |
+| Delays and durations                                   | `s`                   |
+| Grid `lineweight`                                      | `%`                   |
+
+## Reactive inputs
+
+All inputs are signal inputs, so shapes update as soon as the values you bind change:
+
+```ts
+import { Component, signal } from "@angular/core";
+import { Isometric } from "isometric-angular";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-lift",
+  imports: [Isometric, IsometricPlane],
+  template: `
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 6, height: 6 }"
+        color="#4f8bff"
+        [position]="{ elevation: elevation() }"
+      ></div>
+    </div>
+
+    <button type="button" (click)="elevation.set(elevation() + 1)">Raise</button>
+  `,
+})
+export class Lift {
+  protected readonly elevation = signal(0);
+}
+```
+
+Next step: continue with the [Components](../components/isometric.mdx) reference for full input details.

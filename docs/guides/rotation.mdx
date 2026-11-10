@@ -1,0 +1,93 @@
+---
+sidebar_position: 5
+title: Rotation
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# Rotation
+
+Use `rotation` to animate a component around the Z axis.
+
+## Type signature
+
+```ts
+interface Rotation {
+  from: string | number;
+  to: string | number;
+  delay?: number;
+  duration?: number;
+}
+```
+
+## Supported components
+
+- [IsometricCube](../components/isometric-cube.mdx)
+- [IsometricPlane](../components/isometric-plane.mdx)
+- [IsometricGrid](../components/isometric-grid.mdx)
+
+## Example
+
+```ts
+import { Component } from "@angular/core";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-rotating-plane",
+  imports: [IsometricPlane],
+  template: `
+    <div
+      isometric-plane
+      [size]="{ width: 5, height: 5 }"
+      color="cyan"
+      [rotation]="{ from: 0, to: 360, duration: 4 }"
+    ></div>
+  `,
+})
+export class RotatingPlane {}
+```
+
+### Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 5, height: 5 }"
+        color="cyan"
+        [rotation]="{ from: 0, to: 360, duration: 4 }"
+      ></div>
+    </div>
+  `}
+/>
+
+## Fields
+
+| Field      | Type               | Description                                                |
+| ---------- | ------------------ | ---------------------------------------------------------- |
+| `from`     | `number \| string` | Initial rotation value. Numbers are treated as `deg`.      |
+| `to`       | `number \| string` | Final rotation value. Numbers are treated as `deg`.        |
+| `delay`    | `number`           | Delay before animation starts (seconds).                   |
+| `duration` | `number`           | Animation duration (seconds).                              |
+
+The animation runs linearly and repeats forever.
+
+:::warning[Version 1.0.0]
+
+In `isometric-angular@1.0.0` the `from` and `to` values are not applied yet, so the animation always turns from `0deg` to `360deg`. Until this is fixed, keep `rotation` for the duration and delay, and set the angles through the CSS variables the animation reads:
+
+```html
+<div
+  isometric-plane
+  [size]="{ width: 6, height: 3 }"
+  color="cyan"
+  [rotation]="{ from: 0, to: 180, duration: 2 }"
+  [style.--rotation-from]="'0deg'"
+  [style.--rotation-to]="'180deg'"
+></div>
+```
+
+With a `delay`, also set `--isometric-rotate-from`, which holds the angle shown before the animation starts.
+
+:::

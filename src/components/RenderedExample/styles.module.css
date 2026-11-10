@@ -1,0 +1,20 @@
+.exampleFrame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 20rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.75rem;
+  background: var(--ifm-background-surface-color);
+  overflow-x: auto;
+  position: relative;
+}
+
+.exampleError {
+  max-width: 100%;
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--ifm-color-danger);
+}

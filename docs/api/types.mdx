@@ -1,0 +1,196 @@
+---
+sidebar_position: 1
+title: Types
+---
+
+# Types
+
+This page lists the core TypeScript types used across `isometric-angular`.
+
+Shared types are exported from the root entry point. `CubeSides` comes from the cube entry point:
+
+```ts
+import type {
+  Border,
+  ClassValue,
+  Edge,
+  Position,
+  Rotation,
+  Shadow,
+  ShadowAnimation,
+  SizeAsObject,
+  SizeMultiplier,
+  SizeProps,
+} from "isometric-angular";
+import type { CubeSides } from "isometric-angular/isometric-cube";
+```
+
+Use them to type values you keep in your component class and bind in the template:
+
+```ts
+import { Component } from "@angular/core";
+import type { Position, Shadow } from "isometric-angular";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-floor",
+  imports: [IsometricPlane],
+  template: `
+    <div
+      isometric-plane
+      [size]="{ width: 8, height: 8 }"
+      [position]="position"
+      [shadow]="shadow"
+    ></div>
+  `,
+})
+export class Floor {
+  protected readonly position: Position = { top: 1, left: 1 };
+  protected readonly shadow: Shadow = { distance: 2, spacingX: 1, spacingY: 1 };
+}
+```
+
+## Geometry and layout
+
+### `SizeAsObject`
+
+```ts
+interface SizeAsObject {
+  width: string | number;
+  height: string | number;
+}
+```
+
+Used by `IsometricCube` and `IsometricPlane`.
+
+### `SizeProps`
+
+```ts
+type SizeProps = SizeAsObject | string | number;
+```
+
+A size given either as separate `width` and `height` or as a single value for both.
+
+### `Position`
+
+```ts
+interface Position {
+  top?: string | number;
+  left?: string | number;
+  elevation?: string | number;
+}
+```
+
+Used by `IsometricCube`, `IsometricPlane`, and `IsometricGrid`.
+
+### `SizeMultiplier`
+
+```ts
+interface SizeMultiplier {
+  width?: number;
+  height?: number;
+}
+```
+
+Used by `IsometricGrid`.
+
+## Surface and depth styling
+
+### `Border`
+
+```ts
+import type { Property } from "csstype";
+
+type Length = number | (string & {});
+
+interface Border {
+  size?: Property.BorderWidth<Length>;
+  style?: Property.BorderStyle;
+  color?: Property.BorderColor;
+}
+```
+
+Used by `IsometricCube` and `IsometricPlane`.
+
+### `Edge`
+
+```ts
+interface Edge {
+  depth?: string | number;
+  color?: string;
+}
+```
+
+Used by `IsometricPlane`.
+
+## Shadows and animation
+
+### `Shadow`
+
+```ts
+interface Shadow {
+  distance: string | number;
+  spacingX: number;
+  spacingY: number;
+}
+```
+
+Used by `IsometricCube`, `IsometricPlane`, and `IsometricGrid`.
+
+### `ShadowAnimation`
+
+```ts
+interface ShadowAnimation {
+  from: string | number;
+  to: string | number;
+  spacingX: number;
+  spacingY: number;
+  delay?: number;
+  duration?: number;
+  options?: string;
+}
+```
+
+Used by `IsometricCube`, `IsometricPlane`, and `IsometricGrid`.
+
+### `Rotation`
+
+```ts
+interface Rotation {
+  from: string | number;
+  to: string | number;
+  delay?: number;
+  duration?: number;
+}
+```
+
+Used by `IsometricCube`, `IsometricPlane`, and `IsometricGrid`.
+
+## Classes and cube faces
+
+### `ClassValue`
+
+```ts
+type ClassValue =
+  | string
+  | string[]
+  | Record<string, boolean>
+  | null
+  | undefined;
+```
+
+Used by the `isometricClass` input of `Isometric`.
+
+### `CubeSides`
+
+```ts
+type CubeSides =
+  | "top"
+  | "front-left"
+  | "front-right"
+  | "bottom"
+  | "back-left"
+  | "back-right";
+```
+
+Used by the `IsometricCubeSide` directive.

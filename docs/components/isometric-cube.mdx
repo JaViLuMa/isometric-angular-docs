@@ -1,0 +1,151 @@
+---
+sidebar_position: 2
+title: IsometricCube
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# IsometricCube
+
+`IsometricCube` renders a cube using a required size and depth. Its faces are child elements marked with the `IsometricCubeSide` directive.
+
+## Import
+
+```ts
+import {
+  IsometricCube,
+  IsometricCubeSide,
+} from "isometric-angular/isometric-cube";
+```
+
+Add both to your component's `imports`.
+
+## Selectors
+
+```html
+<div isometric-cube [size]="{ width: 5, height: 5 }" [depth]="2">
+  <div isometricCubeSide="top"></div>
+</div>
+```
+
+| Selector              | Class               | Description                       |
+| --------------------- | ------------------- | --------------------------------- |
+| `[isometric-cube]`    | `IsometricCube`     | The cube itself (component).      |
+| `[isometricCubeSide]` | `IsometricCubeSide` | Marks an element as a cube face (directive). |
+
+## Inputs (`isometric-cube`)
+
+| Input             | Type                                                | Required | Description                           |
+| ----------------- | --------------------------------------------------- | -------- | ------------------------------------- |
+| `size`            | `{ width: number \| string; height: number \| string }` | Yes      | Base cube dimensions.                 |
+| `depth`           | `number \| string`                                  | Yes      | Cube depth.                           |
+| `position`        | `Position`                                          | No       | Offsets and elevation values.         |
+| `border`          | `Border`                                            | No       | Border styling for rendered faces.    |
+| `shadow`          | `Shadow`                                            | No       | Shadow distance and spacing settings. |
+| `shadowAnimation` | `ShadowAnimation`                                   | No       | Animated shadow configuration.        |
+| `rotation`        | `Rotation`                                          | No       | Rotation animation configuration.     |
+
+Put one element per face you want to see inside the cube.
+
+## Inputs (`isometricCubeSide`)
+
+| Input               | Type                                                                                | Required | Description                |
+| ------------------- | ----------------------------------------------------------------------------------- | -------- | -------------------------- |
+| `isometricCubeSide` | `"top" \| "front-left" \| "front-right" \| "bottom" \| "back-left" \| "back-right"` | Yes      | Which cube face to render. |
+
+The directive only positions the element as a face (it adds an `isometric-cube-<side>` class). Background, text, and any other content are up to you.
+
+## Basic usage
+
+```ts
+import { Component } from "@angular/core";
+import {
+  IsometricCube,
+  IsometricCubeSide,
+} from "isometric-angular/isometric-cube";
+
+@Component({
+  selector: "app-basic-cube",
+  imports: [IsometricCube, IsometricCubeSide],
+  template: `
+    <div isometric-cube [size]="{ width: 5, height: 5 }" [depth]="2">
+      <div isometricCubeSide="top"></div>
+      <div isometricCubeSide="front-left"></div>
+      <div isometricCubeSide="front-right"></div>
+      <div isometricCubeSide="bottom"></div>
+      <div isometricCubeSide="back-left"></div>
+      <div isometricCubeSide="back-right"></div>
+    </div>
+  `,
+})
+export class BasicCube {}
+```
+
+### Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div
+        isometric-cube
+        [size]="{ width: 6, height: 6 }"
+        [depth]="6"
+        [border]="{ size: '1px', color: 'red' }"
+      >
+        <div isometricCubeSide="top" style="background-color: white; color: black">TOP</div>
+        <div isometricCubeSide="front-left" style="background-color: white; color: black">FRONT LEFT</div>
+        <div isometricCubeSide="front-right" style="background-color: white; color: black">FRONT RIGHT</div>
+      </div>
+    </div>
+  `}
+/>
+
+## With optional inputs
+
+```ts
+import { Component } from "@angular/core";
+import type { Border, Position, Shadow } from "isometric-angular";
+import {
+  IsometricCube,
+  IsometricCubeSide,
+} from "isometric-angular/isometric-cube";
+
+@Component({
+  selector: "app-styled-cube",
+  imports: [IsometricCube, IsometricCubeSide],
+  template: `
+    <section
+      isometric-cube
+      [size]="{ width: 5, height: 5 }"
+      [depth]="2"
+      [position]="position"
+      [border]="border"
+      [shadow]="shadow"
+    >
+      <div isometricCubeSide="top"></div>
+      <div isometricCubeSide="front-left"></div>
+      <div isometricCubeSide="front-right"></div>
+    </section>
+  `,
+})
+export class StyledCube {
+  protected readonly position: Position = { top: 2, left: 1, elevation: 1 };
+  protected readonly border: Border = {
+    size: 1,
+    style: "solid",
+    color: "#2f2f2f",
+  };
+  protected readonly shadow: Shadow = { distance: 2, spacingX: 1, spacingY: 1 };
+}
+```
+
+## Supported shared inputs
+
+- [Position](../guides/positioning.mdx)
+- [Border](../guides/borders-and-edges.mdx)
+- [Shadow](../guides/shadows.mdx)
+- [ShadowAnimation](../guides/shadow-animations.mdx)
+- [Rotation](../guides/rotation.mdx)
+- [Any host element](../guides/host-elements.mdx)
+
+`IsometricCube` does **not** support the `edge` input.

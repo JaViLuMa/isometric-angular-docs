@@ -1,0 +1,99 @@
+---
+sidebar_position: 3
+title: IsometricPlane
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# IsometricPlane
+
+`IsometricPlane` renders a flat isometric surface. It is useful for floors, platforms, and layered scenes.
+
+## Import
+
+```ts
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+```
+
+## Selector
+
+```html
+<div isometric-plane [size]="{ width: 8, height: 8 }"></div>
+```
+
+## Inputs
+
+| Input             | Type                                                | Required | Description                                  |
+| ----------------- | --------------------------------------------------- | -------- | -------------------------------------------- |
+| `size`            | `{ width: number \| string; height: number \| string }` | Yes      | Plane dimensions.                            |
+| `color`           | `string`                                            | No       | Plane color. Defaults to `#000`.             |
+| `position`        | `Position`                                          | No       | Offsets and elevation values.                |
+| `border`          | `Border`                                            | No       | Border styling around the plane.             |
+| `edge`            | `Edge`                                              | No       | Edge depth and edge color settings.          |
+| `shadow`          | `Shadow`                                            | No       | Shadow distance and spacing settings.        |
+| `shadowAnimation` | `ShadowAnimation`                                   | No       | Animated shadow configuration.               |
+| `rotation`        | `Rotation`                                          | No       | Rotation animation configuration.            |
+
+Content placed inside the plane is projected onto its surface.
+
+## Basic usage
+
+```ts
+import { Component } from "@angular/core";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-basic-plane",
+  imports: [IsometricPlane],
+  template: `<div isometric-plane [size]="{ width: 8, height: 8 }"></div>`,
+})
+export class BasicPlane {}
+```
+
+### Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 8, height: 8 }"
+        color="#5f92ff"
+        [edge]="{ depth: 2, color: '#3553a5' }"
+      ></div>
+    </div>
+  `}
+/>
+
+## With optional inputs
+
+```ts
+import { Component } from "@angular/core";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-styled-plane",
+  imports: [IsometricPlane],
+  template: `
+    <section
+      isometric-plane
+      [size]="{ width: 8, height: 8 }"
+      color="#4f8bff"
+      [position]="{ top: 1, left: 2, elevation: 1 }"
+      [border]="{ size: 1, style: 'solid', color: '#1f2a44' }"
+      [edge]="{ depth: 2, color: '#2c4ea3' }"
+      [shadow]="{ distance: 2, spacingX: 1, spacingY: 1 }"
+    ></section>
+  `,
+})
+export class StyledPlane {}
+```
+
+## Supported shared inputs
+
+- [Position](../guides/positioning.mdx)
+- [Border and Edge](../guides/borders-and-edges.mdx)
+- [Shadow](../guides/shadows.mdx)
+- [ShadowAnimation](../guides/shadow-animations.mdx)
+- [Rotation](../guides/rotation.mdx)
+- [Any host element](../guides/host-elements.mdx)

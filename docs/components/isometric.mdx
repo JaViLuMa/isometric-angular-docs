@@ -1,0 +1,98 @@
+---
+sidebar_position: 1
+title: Isometric
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# Isometric
+
+`Isometric` is the root container that provides the isometric perspective for its content. Every cube, plane, and grid must be rendered inside it.
+
+## Import
+
+```ts
+import { Isometric } from "isometric-angular";
+```
+
+## Selector
+
+```html
+<div isometric-root>...</div>
+```
+
+`isometric-root` is an attribute selector, so you choose the host element (see [Host Elements](../guides/host-elements.mdx)). The host receives the `isometric-container` class and wraps the projected content in an inner `.isometric` element:
+
+```html
+<div isometric-root class="isometric-container">
+  <div class="isometric">
+    <!-- your content -->
+  </div>
+</div>
+```
+
+## Inputs
+
+| Input            | Type         | Required | Description                                       |
+| ---------------- | ------------ | -------- | ------------------------------------------------- |
+| `isometricClass` | `ClassValue` | No       | Classes added to the inner `.isometric` element. |
+
+`ClassValue` accepts a string, an array of strings, or a `Record<string, boolean>`, just like Angular's `[class]` binding.
+
+## Content
+
+Everything between the host's tags is projected into the inner `.isometric` element.
+
+## Layout
+
+The inner `.isometric` element is absolutely positioned at the center (`top: 50%; left: 50%`) of the nearest positioned ancestor. Give a surrounding element (or the host itself) `position: relative` and a height so the scene has room:
+
+```css
+.scene {
+  position: relative;
+  height: 20rem;
+}
+```
+
+```html
+<section isometric-root class="scene">...</section>
+```
+
+## Example
+
+```ts
+import { Component } from "@angular/core";
+import { Isometric } from "isometric-angular";
+import { IsometricPlane } from "isometric-angular/isometric-plane";
+
+@Component({
+  selector: "app-example",
+  imports: [Isometric, IsometricPlane],
+  template: `
+    <div isometric-root>
+      <div isometric-plane [size]="{ width: 6, height: 6 }"></div>
+    </div>
+  `,
+})
+export class Example {}
+```
+
+### Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div
+        isometric-plane
+        [size]="{ width: 6, height: 6 }"
+        color="#4f8bff"
+        [edge]="{ depth: 2, color: '#2c4ea3' }"
+      ></div>
+    </div>
+  `}
+/>
+
+## Supported shared inputs
+
+- Works on any host element, see [Host Elements](../guides/host-elements.mdx).
+- Does not support positioning, border/edge, shadow, or animation inputs directly.

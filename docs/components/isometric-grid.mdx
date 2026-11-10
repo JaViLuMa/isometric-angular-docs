@@ -1,0 +1,99 @@
+---
+sidebar_position: 4
+title: IsometricGrid
+---
+
+import RenderedExample from "@site/src/components/RenderedExample";
+
+# IsometricGrid
+
+`IsometricGrid` renders a configurable isometric grid. It is useful for scene alignment, level layouts, and visual guides.
+
+## Import
+
+```ts
+import { IsometricGrid } from "isometric-angular/isometric-grid";
+```
+
+## Selector
+
+```html
+<div isometric-grid [size]="10"></div>
+```
+
+## Inputs
+
+| Input             | Type               | Required | Description                                                         |
+| ----------------- | ------------------ | -------- | ------------------------------------------------------------------- |
+| `size`            | `number \| string` | Yes      | Size of one grid cell.                                              |
+| `sizeMultiplier`  | `SizeMultiplier`   | No       | Number of cells horizontally (`width`) and vertically (`height`). Both default to `1`. |
+| `color`           | `string`           | No       | Grid line color. Defaults to `#000`.                                |
+| `lineweight`      | `number \| string` | No       | Thickness of grid lines. Numbers are percentages of a cell.         |
+| `position`        | `Position`         | No       | Offsets and elevation values.                                       |
+| `shadow`          | `Shadow`           | No       | Shadow distance and spacing settings.                               |
+| `shadowAnimation` | `ShadowAnimation`  | No       | Animated shadow configuration.                                      |
+| `rotation`        | `Rotation`         | No       | Rotation animation configuration.                                   |
+
+## Basic usage
+
+```ts
+import { Component } from "@angular/core";
+import { IsometricGrid } from "isometric-angular/isometric-grid";
+
+@Component({
+  selector: "app-basic-grid",
+  imports: [IsometricGrid],
+  template: `<div isometric-grid [size]="10"></div>`,
+})
+export class BasicGrid {}
+```
+
+### Rendered example
+
+<RenderedExample
+  template={`
+    <div isometric-root>
+      <div
+        isometric-grid
+        [size]="3"
+        [sizeMultiplier]="{ width: 5, height: 4 }"
+        color="#7a88a0"
+        [lineweight]="1.2"
+      ></div>
+    </div>
+  `}
+/>
+
+## With optional inputs
+
+```ts
+import { Component } from "@angular/core";
+import { IsometricGrid } from "isometric-angular/isometric-grid";
+
+@Component({
+  selector: "app-styled-grid",
+  imports: [IsometricGrid],
+  template: `
+    <section
+      isometric-grid
+      [size]="10"
+      [sizeMultiplier]="{ width: 1, height: 1 }"
+      color="#6f7f92"
+      [lineweight]="1"
+      [position]="{ top: 0, left: 0, elevation: 0 }"
+      [shadow]="{ distance: 1, spacingX: 1, spacingY: 1 }"
+    ></section>
+  `,
+})
+export class StyledGrid {}
+```
+
+## Supported shared inputs
+
+- [Position](../guides/positioning.mdx)
+- [Shadow](../guides/shadows.mdx)
+- [ShadowAnimation](../guides/shadow-animations.mdx)
+- [Rotation](../guides/rotation.mdx)
+- [Any host element](../guides/host-elements.mdx)
+
+`IsometricGrid` does **not** support `border` or `edge`.
